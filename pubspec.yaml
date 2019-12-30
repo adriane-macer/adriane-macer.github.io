@@ -1,0 +1,79 @@
+name: fh2019
+description: A new Flutter project.
+
+version: 1.0.2+2
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+  # sdk: ">=2.3.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  url_launcher: ^5.0.3
+  provider: any
+  navigate: ^1.0.1
+  transparent_image: ^1.0.0
+  toast: ^0.1.3
+  flare_splash_screen: any
+  intl:
+  shared_preferences: ^0.5.3+4
+  flushbar: ^1.8.2
+  progress_dialog: ^1.2.0
+  basic_utils: ^1.8.2
+  modal_progress_hud: ^0.1.3
+  get_it: ^1.0.3
+  cached_network_image: ^1.1.1
+  carousel_slider: ^1.3.1
+  firebase_ml_vision: ^0.9.3
+  image_picker: ^0.6.1+10
+  flare_flutter: ^1.7.1
+  animator: ^1.0.0+1
+
+dev_dependencies:
+  # https://medium.com/@psyanite/how-to-add-app-launcher-icons-in-flutter-bd92b0e0873a
+  # flutter packages pub run flutter_launcher_icons:main
+  # https://adapticon.tooo.io/
+  flutter_launcher_icons: "^0.7.0"
+  font_awesome_flutter:
+  flutter_test:
+    sdk: flutter
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/images/launcher/icon.png"
+  image_path_android: "assets/images/launcher/icon.png"
+  adaptive_icon_background: "assets/images/launcher/background.png"
+  adaptive_icon_foreground: "assets/images/launcher/foreground.png"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/logos/
+    - assets/images/launcher/
+    - assets/flare/
+    - assets/images/
+    - assets/images/banner/
+    - assets/images/items/beef/
+    - assets/images/items/chicken/
+    - assets/images/items/pork/
+    - assets/images/items/seafood/
+    - assets/images/items/vegetables/
+    - assets/images/items/desserts/
+    - assets/images/items/others/
+
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/Raleway-Regular.ttf
+
+    - family: boxicons
+      fonts:
+        - asset: assets/fonts/boxicons.ttf
+
+    - family: fontello
+      fonts:
+        - asset: assets/fonts/fontello.ttf
