@@ -47845,7 +47845,7 @@ F.tS.prototype={
 ag:function(){return new F.Uh(C.j)}}
 F.Uh.prototype={
 ac:function(){this.aQ()},
-F:function(a){return new S.tR(new D.ij(null),P.at(["/layout",new F.Ui(),"/home",new F.Uj(),"/checkout",new F.Uk(),"/play",new F.Ul(),"/start",new F.Um(),"/facial",new F.Un(),"/end",new F.Uo(),"/facial_capture",new F.Up(),"/facial_order",new F.Uq(),"/facial_picture",new F.Ur()],P.i,{func:1,ret:N.a7,args:[N.as]}),"Tarlac Electric Inc.",!1,!1,null)},
+F:function(a){return new S.tR(new D.ij(null),P.at(["/layout",new F.Ui(),"/home",new F.Uj(),"/checkout",new F.Uk(),"/play",new F.Ul(),"/start",new F.Um(),"/facial",new F.Un(),"/end",new F.Uo(),"/facial_capture",new F.Up(),"/facial_order",new F.Uq(),"/facial_picture",new F.Ur()],P.i,{func:1,ret:N.a7,args:[N.as]}),"Intelligent ordering system",!1,!1,null)},
 $aa_:function(){return[F.tS]}}
 F.Ui.prototype={
 $1:function(a){return new D.ij(null)},
