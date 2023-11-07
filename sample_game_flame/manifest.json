@@ -1,6 +1,6 @@
 {
-    "name": "bricks_destroyer",
-    "short_name": "bricks_destroyer",
+    "name": "sample_flame_game",
+    "short_name": "sample_flame_game",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
