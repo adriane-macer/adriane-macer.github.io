@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Adrian Evangelista · Senior Mobile Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:       #080c14;
+    --bg2:      #0d1320;
+    --bg3:      #111827;
+    --blue:     #38bdf8;
+    --blue2:    #0ea5e9;
+    --amber:    #f59e0b;
+    --green:    #34d399;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --border:   #1e293b;
+    --glow:     rgba(56,189,248,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── CANVAS BG ─────────────────────────────────────────────── */
+  #grid-canvas {
+    position: fixed; inset: 0;
+    z-index: 0; pointer-events: none;
+    opacity: .45;
+  }
+
+  /* ─── NAV ────────────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(8,12,20,.8);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: .12em;
+    color: var(--blue);
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: .78rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--blue); }
+
+  /* ─── SECTIONS ───────────────────────────────────────────────── */
+  section { position: relative; z-index: 1; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem; }
+
+  /* ─── HERO ───────────────────────────────────────────────────── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding-top: 5rem;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .78rem;
+    color: var(--blue);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp .6s .2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    line-height: .95;
+    letter-spacing: .02em;
+    color: #fff;
+    opacity: 0;
+    animation: fadeUp .7s .35s forwards;
+  }
+  .hero-name span { color: var(--blue); }
+
+  .hero-tagline {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 420px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp .7s .55s forwards;
+  }
+
+  .hero-chips {
+    display: flex; flex-wrap: wrap; gap: .6rem;
+    margin-top: 2rem;
+    opacity: 0;
+    animation: fadeUp .7s .7s forwards;
+  }
+
+  .chip {
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem;
+    padding: .35rem .9rem;
+    border-radius: 3px;
+    border: 1px solid;
+    letter-spacing: .06em;
+    white-space: nowrap;
+  }
+  .chip-blue { border-color: var(--blue2); color: var(--blue); background: rgba(56,189,248,.07); }
+  .chip-amber{ border-color: rgba(245,158,11,.4); color: var(--amber); background: rgba(245,158,11,.06); }
+  .chip-green{ border-color: rgba(52,211,153,.4); color: var(--green); background: rgba(52,211,153,.06); }
+
+  .hero-cta {
+    display: flex; gap: 1rem; margin-top: 2.5rem;
+    opacity: 0;
+    animation: fadeUp .7s .85s forwards;
+  }
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: .82rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .85rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all .25s;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--blue);
+    color: #080c14;
+    border: 1px solid var(--blue);
+    font-weight: 700;
+  }
+  .btn-primary:hover { background: #7dd3fc; border-color: #7dd3fc; box-shadow: 0 0 28px rgba(56,189,248,.35); }
+  .btn-outline {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* hero right — floating phone mockup */
+  .hero-visual {
+    display: flex; justify-content: center; align-items: center;
+    opacity: 0;
+    animation: fadeIn 1s .9s forwards;
+  }
+
+  .phone-wrap {
+    position: relative;
+    width: 220px;
+  }
+  .phone-frame {
+    width: 220px; height: 440px;
+    background: var(--bg2);
+    border-radius: 36px;
+    border: 2px solid #1e293b;
+    box-shadow: 0 0 0 6px #0d1320, 0 0 80px rgba(56,189,248,.18), inset 0 0 60px rgba(0,0,0,.6);
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    animation: float 5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0) rotate(-2deg); }
+    50%      { transform: translateY(-14px) rotate(-2deg); }
+  }
+
+  .phone-screen {
+    flex: 1; padding: 1.5rem 1rem 1rem;
+    display: flex; flex-direction: column; gap: .6rem;
+    overflow: hidden;
+  }
+  .phone-status {
+    display: flex; justify-content: space-between;
+    font-family: 'DM Mono', monospace; font-size: .55rem; color: var(--muted);
+  }
+  .phone-app-name {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem;
+    color: var(--blue); letter-spacing: .1em;
+  }
+  .phone-bar { height: 4px; border-radius: 2px; background: var(--border); margin: .2rem 0; }
+  .phone-bar.active { background: linear-gradient(90deg, var(--blue), var(--green)); width: 70%; }
+  .phone-card {
+    background: rgba(56,189,248,.07); border: 1px solid rgba(56,189,248,.15);
+    border-radius: 10px; padding: .65rem .8rem;
+  }
+  .phone-card-label { font-family: 'DM Mono', monospace; font-size: .52rem; color: var(--muted); margin-bottom: .2rem; }
+  .phone-card-val { font-size: .85rem; font-weight: 700; color: var(--text); }
+  .phone-row { display: flex; gap: .5rem; }
+  .phone-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); margin-top: 3px; flex-shrink: 0; }
+
+  .phone-notch {
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 10px; background: var(--bg);
+    border-radius: 6px; z-index: 2;
+  }
+
+  /* decorative orbits */
+  .orbit {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px dashed rgba(56,189,248,.12);
+    animation: spin linear infinite;
+  }
+  .orbit-1 { width: 320px; height: 320px; top: -50px; left: -50px; animation-duration: 28s; }
+  .orbit-2 { width: 480px; height: 480px; top: -130px; left: -130px; animation-duration: 42s; animation-direction: reverse; }
+  .orbit-dot {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%) translateY(-50%);
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--blue); box-shadow: 0 0 10px var(--blue);
+  }
+
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* ─── STATS BAR ──────────────────────────────────────────────── */
+  #stats {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 0;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 1rem 1.5rem;
+    border-right: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .5s, transform .5s;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item.visible { opacity: 1; transform: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; line-height: 1;
+    color: var(--blue);
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem; color: var(--muted);
+    letter-spacing: .08em; text-transform: uppercase;
+    margin-top: .4rem;
+  }
+
+  /* ─── ABOUT ──────────────────────────────────────────────────── */
+  #about { padding: 7rem 0; }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: .75rem; color: var(--blue);
+    letter-spacing: .16em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 2rem;
+  }
+  .section-title span { color: var(--blue); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    line-height: 1.8;
+    font-size: .97rem;
+  }
+  .about-text p strong { color: var(--text); }
+
+  .skill-stack { display: flex; flex-direction: column; gap: 1rem; }
+  .skill-row-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem; color: var(--blue);
+    letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+  .skill-pills { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .skill-pill {
+    font-family: 'DM Mono', monospace; font-size: .72rem;
+    padding: .3rem .75rem; border-radius: 3px;
+    background: var(--bg3); color: var(--text);
+    border: 1px solid var(--border);
+    transition: all .2s;
+  }
+  .skill-pill:hover { border-color: var(--blue); color: var(--blue); background: rgba(56,189,248,.07); }
+
+  /* ─── EXPERIENCE ─────────────────────────────────────────────── */
+  #experience { padding: 6rem 0; background: var(--bg2); }
+
+  .timeline { position: relative; padding-left: 2rem; margin-top: 3rem; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--blue), transparent);
+  }
+
+  .job {
+    position: relative;
+    padding: 0 0 3.5rem 2.5rem;
+    opacity: 0; transform: translateX(-20px);
+    transition: opacity .5s, transform .5s;
+  }
+  .job.visible { opacity: 1; transform: none; }
+
+  .job::before {
+    content: '';
+    position: absolute; left: -7px; top: 6px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--bg2);
+    border: 2px solid var(--blue);
+    box-shadow: 0 0 12px rgba(56,189,248,.4);
+  }
+
+  .job-header { margin-bottom: .8rem; }
+  .job-dates {
+    font-family: 'DM Mono', monospace; font-size: .72rem;
+    color: var(--amber); letter-spacing: .06em;
+    margin-bottom: .3rem;
+  }
+  .job-title-row { display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+  .job-role {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 800; color: #fff;
+  }
+  .job-company {
+    font-family: 'DM Mono', monospace; font-size: .8rem;
+    color: var(--blue);
+  }
+
+  .job-bullets { list-style: none; margin-top: .8rem; display: flex; flex-direction: column; gap: .55rem; }
+  .job-bullets li {
+    font-size: .92rem; color: var(--muted); line-height: 1.65; padding-left: 1.2rem; position: relative;
+  }
+  .job-bullets li::before {
+    content: '▸'; position: absolute; left: 0; color: var(--blue); font-size: .8rem;
+  }
+  .job-bullets li strong { color: var(--text); }
+
+  .job-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+  .job-tag {
+    font-family: 'DM Mono', monospace; font-size: .65rem;
+    padding: .22rem .65rem; border-radius: 2px;
+    background: rgba(56,189,248,.08); color: var(--blue);
+    border: 1px solid rgba(56,189,248,.2);
+  }
+
+  /* ─── STACK SHOWCASE ─────────────────────────────────────────── */
+  #stack { padding: 6rem 0; }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .stack-cell {
+    background: var(--bg2);
+    padding: 2rem 1.5rem;
+    display: flex; flex-direction: column; align-items: center;
+    gap: .8rem; text-align: center;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background .25s;
+    cursor: default;
+  }
+  .stack-cell:hover { background: var(--bg3); }
+  .stack-icon { font-size: 2rem; }
+  .stack-name {
+    font-family: 'DM Mono', monospace; font-size: .78rem;
+    color: var(--text); font-weight: 500;
+  }
+  .stack-sub {
+    font-family: 'DM Mono', monospace; font-size: .65rem;
+    color: var(--muted);
+  }
+
+  /* ─── CONTACT ────────────────────────────────────────────────── */
+  #contact {
+    padding: 7rem 0;
+    background: var(--bg2);
+    text-align: center;
+  }
+  .contact-box {
+    max-width: 600px; margin: 0 auto;
+  }
+  .contact-box p {
+    color: var(--muted); margin: 1.5rem auto;
+    font-size: .97rem; line-height: 1.8; max-width: 480px;
+  }
+  .contact-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 2.5rem; flex-wrap: wrap; }
+  .contact-link {
+    font-family: 'DM Mono', monospace; font-size: .8rem;
+    color: var(--muted); text-decoration: none;
+    display: flex; align-items: center; gap: .5rem;
+    letter-spacing: .06em;
+    transition: color .2s;
+  }
+  .contact-link:hover { color: var(--blue); }
+  .contact-link .icon { font-size: 1.1rem; }
+
+  /* ─── FOOTER ─────────────────────────────────────────────────── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 1.8rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--muted);
+  }
+
+  /* ─── ANIMATIONS ─────────────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity .65s, transform .65s;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; padding: 0 1.5rem; }
+    .hero-visual { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stat-item:nth-child(2) { border-right: none; }
+    footer { flex-direction: column; gap: .5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- animated grid bg -->
+<canvas id="grid-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">AE//DEV</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#stack">Stack</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="hero-label">// Senior Mobile Engineer · Philippines</p>
+      <h1 class="hero-name">Adrian<br/><span>Evangelista</span></h1>
+      <p class="hero-tagline">
+        9+ years architecting cross-platform mobile experiences. Deep in
+        Flutter, Kotlin Multiplatform, and Jetpack Compose — from clean
+        architecture to real-time systems at scale.
+      </p>
+      <div class="hero-chips">
+        <span class="chip chip-blue">Flutter</span>
+        <span class="chip chip-blue">KMP</span>
+        <span class="chip chip-blue">Jetpack Compose</span>
+        <span class="chip chip-amber">Clean Architecture</span>
+        <span class="chip chip-amber">BLoC / GetX</span>
+        <span class="chip chip-green">Real-time Systems</span>
+        <span class="chip chip-green">CTO Experience</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#experience" class="btn btn-primary">View Experience</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div style="position:relative;">
+        <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+        <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
+        <div class="phone-wrap">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="phone-status">
+                <span>9:41</span><span>📶</span>
+              </div>
+              <div class="phone-app-name">FLUTTER APP</div>
+              <div class="phone-bar active"></div>
+              <div class="phone-bar" style="width:45%"></div>
+              <div style="height:.4rem"></div>
+              <div class="phone-card">
+                <div class="phone-card-label">Active Users</div>
+                <div class="phone-card-val">12,480</div>
+              </div>
+              <div class="phone-row">
+                <div class="phone-card" style="flex:1">
+                  <div class="phone-card-label">Platform</div>
+                  <div class="phone-card-val" style="font-size:.78rem">Android · iOS</div>
+                </div>
+                <div class="phone-card" style="flex:1">
+                  <div class="phone-card-label">Arch</div>
+                  <div class="phone-card-val" style="font-size:.78rem">BLoC</div>
+                </div>
+              </div>
+              <div class="phone-card" style="background:rgba(52,211,153,.07);border-color:rgba(52,211,153,.2)">
+                <div style="display:flex;align-items:center;gap:.5rem">
+                  <div class="phone-dot"></div>
+                  <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:#34d399">LIVE SYNC ACTIVE</div>
+                </div>
+              </div>
+              <div class="phone-bar" style="width:80%; margin-top:.4rem"></div>
+              <div class="phone-bar" style="width:55%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-num">9+</div><div class="stat-label">Years Experience</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Cross-Platform Targets</div></div>
+      <div class="stat-item"><div class="stat-num">12+</div><div class="stat-label">Languages & Frameworks</div></div>
+      <div class="stat-item"><div class="stat-num">2×</div><div class="stat-label">Founder / CTO</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <p class="section-eyebrow reveal">// About</p>
+    <h2 class="section-title reveal">Engineering <span>at every layer</span></h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm a <strong>Senior Mobile Engineer</strong> who has spent over nine years building
+          production software — from firmware-level C++ on embedded WinCE systems, through
+          enterprise Java and Python tooling, to modern cross-platform mobile applications
+          shipping on Android and iOS simultaneously.
+        </p>
+        <p>
+          At <strong>Kildekode Inc.</strong> I co-founded and ran the technology strategy at CTO
+          level, defining architecture standards, building CI/CD pipelines, and managing
+          delivery across concurrent client engagements. I stay hands-on in code while being
+          comfortable owning a roadmap.
+        </p>
+        <p>
+          My current focus is <strong>Flutter, Kotlin Multiplatform (KMP), and Jetpack Compose</strong>
+          — architecting clean, testable, performant cross-platform applications with real-time
+          data layers and native OS integration where plugins won't cut it.
+        </p>
+        <p>
+          <strong>Open to remote roles or relocation.</strong> Based in the Philippines (UTC+8).
+        </p>
+      </div>
+      <div class="reveal">
+        <div class="skill-stack">
+          <div>
+            <div class="skill-row-label">Mobile</div>
+            <div class="skill-pills">
+              <span class="skill-pill">Flutter</span>
+              <span class="skill-pill">Jetpack Compose</span>
+              <span class="skill-pill">Compose Multiplatform</span>
+              <span class="skill-pill">KMP</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-row-label">Languages</div>
+            <div class="skill-pills">
+              <span class="skill-pill">Kotlin</span>
+              <span class="skill-pill">Dart</span>
+              <span class="skill-pill">Swift</span>
+              <span class="skill-pill">C++</span>
+              <span class="skill-pill">Python</span>
+              <span class="skill-pill">C#</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-row-label">Architecture</div>
+            <div class="skill-pills">
+              <span class="skill-pill">Clean Architecture</span>
+              <span class="skill-pill">BLoC</span>
+              <span class="skill-pill">GetX</span>
+              <span class="skill-pill">MVVM</span>
+              <span class="skill-pill">Platform Channels</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-row-label">Backend / Infra</div>
+            <div class="skill-pills">
+              <span class="skill-pill">Firebase</span>
+              <span class="skill-pill">Firestore</span>
+              <span class="skill-pill">GetStream SDK</span>
+              <span class="skill-pill">SQLite</span>
+              <span class="skill-pill">Django</span>
+              <span class="skill-pill">CI/CD</span>
+            </div>
+          </div>
+          <div>
+            <div class="skill-row-label">Geolocation</div>
+            <div class="skill-pills">
+              <span class="skill-pill">Google Maps API</span>
+              <span class="skill-pill">OpenStreetMap</span>
+              <span class="skill-pill">Geofencing</span>
+              <span class="skill-pill">Custom Tile Providers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <p class="section-eyebrow reveal">// Work Experience</p>
+    <h2 class="section-title reveal">Where I've <span>shipped</span></h2>
+    <div class="timeline">
+
+      <div class="job">
+        <div class="job-header">
+          <div class="job-dates">May 2021 – Jan 2026</div>
+          <div class="job-title-row">
+            <span class="job-role">Senior Mobile Developer</span>
+            <span class="job-company">@ Techdaddy</span>
+          </div>
+        </div>
+        <ul class="job-bullets">
+          <li><strong>Lead Architect</strong> on high-scale cross-platform apps using Flutter, Dart, and KMP — Clean Architecture + BLoC/GetX for maximum modularity and long-term maintainability.</li>
+          <li><strong>Native bridge engineering</strong> — custom Kotlin platform channels to expose OS-level capabilities directly into Flutter, eliminating latency bottlenecks off-the-shelf plugins couldn't solve.</li>
+          <li><strong>Real-time communication systems</strong> integrating GetStream SDK and Cloud Firestore for live messaging, push notifications, and multi-user synchronisation at scale.</li>
+          <li><strong>Precision geolocation</strong> using Google Maps API and OpenStreetMap with custom tile providers and geofencing logic.</li>
+          <li><strong>Pixel-perfect declarative UIs</strong> in Jetpack Compose and Compose Multiplatform, maintaining visual parity across Android and shared targets.</li>
+        </ul>
+        <div class="job-tags">
+          <span class="job-tag">Flutter</span><span class="job-tag">KMP</span><span class="job-tag">Jetpack Compose</span>
+          <span class="job-tag">GetStream</span><span class="job-tag">Firestore</span><span class="job-tag">Clean Arch</span>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-header">
+          <div class="job-dates">Jan 2018 – Dec 2022</div>
+          <div class="job-title-row">
+            <span class="job-role">Chief Technology Officer</span>
+            <span class="job-company">@ Kildekode, Inc. (Co-Founder)</span>
+          </div>
+        </div>
+        <ul class="job-bullets">
+          <li><strong>Owned the full R&D roadmap</strong> — aligning technology investment with revenue goals, prioritising high-ROI initiatives, and managing delivery across concurrent client projects.</li>
+          <li><strong>Defined mobile architecture standards</strong> company-wide using Unity and C#, establishing a repeatable quality baseline across all client deliverables.</li>
+          <li><strong>Primary bridge</strong> between business stakeholders and engineering — translating ambiguous requirements into scopes, timelines, and acceptance criteria.</li>
+          <li><strong>Built company-wide CI/CD pipelines</strong>, code review processes, and repository governance, improving release velocity and reducing integration failures.</li>
+        </ul>
+        <div class="job-tags">
+          <span class="job-tag">CTO</span><span class="job-tag">Unity / C#</span><span class="job-tag">CI/CD</span>
+          <span class="job-tag">Technical Strategy</span><span class="job-tag">Team Leadership</span>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-header">
+          <div class="job-dates">Oct 2017 – Jul 2018</div>
+          <div class="job-title-row">
+            <span class="job-role">Senior Systems Engineer</span>
+            <span class="job-company">@ Stelsen Integrated Systems</span>
+          </div>
+        </div>
+        <ul class="job-bullets">
+          <li>Built Python/Django and Java automation dashboards for sales and operations — equipment configuration, project monitoring, and field reporting.</li>
+          <li>Designed auxiliary subsystems and resolved complex integration challenges across client sites.</li>
+        </ul>
+        <div class="job-tags">
+          <span class="job-tag">Python</span><span class="job-tag">Django</span><span class="job-tag">Java</span>
+        </div>
+      </div>
+
+      <div class="job">
+        <div class="job-header">
+          <div class="job-dates">Jul 2012 – Sep 2017</div>
+          <div class="job-title-row">
+            <span class="job-role">Software Developer</span>
+            <span class="job-company">@ Askuserv</span>
+          </div>
+        </div>
+        <ul class="job-bullets">
+          <li><strong>Embedded software engineering</strong> for WinCE and Win32 platforms in C++, applying OOP and GoF design patterns for resource-constrained environments.</li>
+          <li>Built Qt-based UIs and SQLite data layers for responsive embedded applications — owned the full stack from UI through persistence.</li>
+          <li>Led UML modelling in IBM Rational Rhapsody and authored integration test suites in Python and C#.</li>
+        </ul>
+        <div class="job-tags">
+          <span class="job-tag">C++</span><span class="job-tag">Qt</span><span class="job-tag">WinCE</span>
+          <span class="job-tag">SQLite</span><span class="job-tag">IBM Rhapsody</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK SHOWCASE -->
+<section id="stack">
+  <div class="container">
+    <p class="section-eyebrow reveal">// Tech Stack</p>
+    <h2 class="section-title reveal">Built with <span>precision tools</span></h2>
+    <div class="stack-grid reveal">
+      <div class="stack-cell"><div class="stack-icon">🐦</div><div class="stack-name">Flutter</div><div class="stack-sub">Cross-platform UI</div></div>
+      <div class="stack-cell"><div class="stack-icon">🎯</div><div class="stack-name">Dart</div><div class="stack-sub">Primary language</div></div>
+      <div class="stack-cell"><div class="stack-icon">🤖</div><div class="stack-name">Kotlin</div><div class="stack-sub">Android / KMP</div></div>
+      <div class="stack-cell"><div class="stack-icon">🧩</div><div class="stack-name">KMP</div><div class="stack-sub">Shared business logic</div></div>
+      <div class="stack-cell"><div class="stack-icon">🖌️</div><div class="stack-name">Jetpack Compose</div><div class="stack-sub">Native Android UI</div></div>
+      <div class="stack-cell"><div class="stack-icon">🔥</div><div class="stack-name">Firebase</div><div class="stack-sub">Backend / Firestore</div></div>
+      <div class="stack-cell"><div class="stack-icon">💬</div><div class="stack-name">GetStream</div><div class="stack-sub">Real-time messaging</div></div>
+      <div class="stack-cell"><div class="stack-icon">🗺️</div><div class="stack-name">Maps API</div><div class="stack-sub">Geo + Geofencing</div></div>
+      <div class="stack-cell"><div class="stack-icon">⚙️</div><div class="stack-name">C++ / Qt</div><div class="stack-sub">Embedded systems</div></div>
+      <div class="stack-cell"><div class="stack-icon">🐍</div><div class="stack-name">Python</div><div class="stack-sub">Tooling / Django</div></div>
+      <div class="stack-cell"><div class="stack-icon">🔄</div><div class="stack-name">CI/CD</div><div class="stack-sub">DevOps automation</div></div>
+      <div class="stack-cell"><div class="stack-icon">🏗️</div><div class="stack-name">Clean Arch</div><div class="stack-sub">BLoC · MVVM · GetX</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-box">
+      <p class="section-eyebrow reveal" style="text-align:center">// Get in Touch</p>
+      <h2 class="section-title reveal" style="text-align:center">Let's build <span>something</span></h2>
+      <p class="reveal">
+        Open to senior mobile engineering roles, architect positions, or consulting engagements.
+        Remote-first, available immediately.
+      </p>
+      <div class="hero-cta reveal" style="justify-content:center">
+        <a href="mailto:adriane.macer@gmail.com" class="btn btn-primary">Email Me</a>
+        <a href="https://linkedin.com/in/adrian-evangelista-909114aa/" target="_blank" class="btn btn-outline">LinkedIn</a>
+      </div>
+      <div class="contact-links reveal">
+        <a href="mailto:adriane.macer@gmail.com" class="contact-link">
+          <span class="icon">✉️</span> adriane.macer@gmail.com
+        </a>
+        <a href="tel:+639171075634" class="contact-link">
+          <span class="icon">📞</span> +63 917 107 5634
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>Adrian Parongan Evangelista · Senior Mobile Engineer</span>
+  <span style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted)">
+    Flutter · KMP · Jetpack Compose · Philippines
+  </span>
+</footer>
+
+<script>
+// ── Animated grid canvas ─────────────────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('grid-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, dots = [];
+  const N = 60;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function init() {
+    resize();
+    dots = [];
+    for (let i = 0; i < N; i++) {
+      dots.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4,
+        r: Math.random() * 1.5 + .5
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // draw grid lines (static)
+    ctx.strokeStyle = 'rgba(30,41,59,0.5)';
+    ctx.lineWidth = 1;
+    const step = 60;
+    for (let x = 0; x < W; x += step) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (let y = 0; y < H; y += step) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    // connections
+    for (let i = 0; i < N; i++) {
+      for (let j = i + 1; j < N; j++) {
+        const dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 140) {
+          ctx.strokeStyle = `rgba(56,189,248,${(1 - dist/140) * .18})`;
+          ctx.lineWidth = .8;
+          ctx.beginPath();
+          ctx.moveTo(dots[i].x, dots[i].y);
+          ctx.lineTo(dots[j].x, dots[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // dots
+    dots.forEach(d => {
+      ctx.fillStyle = 'rgba(56,189,248,0.55)';
+      ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2); ctx.fill();
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < 0 || d.x > W) d.vx *= -1;
+      if (d.y < 0 || d.y > H) d.vy *= -1;
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  init();
+  draw();
+  window.addEventListener('resize', init);
+})();
+
+// ── Intersection observer for reveals ────────────────────────────────────────
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .stat-item, .job').forEach(el => io.observe(el));
+
+// ── Stat counter animation ────────────────────────────────────────────────────
+const statNums = document.querySelectorAll('.stat-num');
+const targets = ['9+', '3', '12+', '2×'];
+let counted = false;
+
+const statIo = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting && !counted) {
+    counted = true;
+    statNums.forEach((el, i) => {
+      el.textContent = targets[i];
+      el.style.animation = 'fadeUp .5s forwards';
+    });
+  }
+}, { threshold: .5 });
+if (statNums[0]) statIo.observe(statNums[0].closest('section'));
+</script>
+</body>
+</html>
